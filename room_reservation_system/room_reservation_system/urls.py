@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from room_reservation_system.booking_management.views import AddRoomView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('room/new', AddRoomView.as_view(), name='add_room'),
 ]
