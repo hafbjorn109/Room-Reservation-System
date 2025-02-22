@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Room</title>
+</head>
+<body>
+{% if error %}
+{{ error }}
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="room_name">Room Name:
+      <input type="text" id="room_name" name="room_name">
+    </label><br>
+    <label for="room_capacity">Room Capacity:
+      <input type="text" id="room_capacity" name="room_capacity">
+    </label><br>
+    <label for="projector_availability">Is projector available?
+      <input type="checkbox" id="projector_availability" name="projector_availability">
+    </label><br>
+        <input type="submit" value="Send">
+</form>
+</body>
+</html>
