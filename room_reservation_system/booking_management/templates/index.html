@@ -5,6 +5,9 @@
     <title>Room Reservation System - Main Menu</title>
 </head>
 <body>
+{% if error %}
+<p> {{ error }}</p>
+{% endif %}
 <h2>Room Reservation System</h2>
 <a href="">All Rooms</a><br>
 <a href="">Add New Room</a>
