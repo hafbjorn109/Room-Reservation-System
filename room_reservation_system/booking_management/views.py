@@ -1,5 +1,3 @@
-from sqlite3 import IntegrityError
-
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -18,6 +16,7 @@ def validate_room_data(room_name, room_capacity):
         tuple: (error_message, is_valid) where `is_valid` is a boolean indicating
                if the room data is valid and `error_message` provides an error message.
     """
+
     if not room_name:
         return "No room name", False
     if Room.objects.filter(name=room_name).exists():
@@ -53,10 +52,8 @@ class AddRoomView(View):
             return render(request, 'add_room.html', context={'error': error_message})
 
         # Create the room
-        try:
-            Room.objects.create(name=room_name, room_capacity=room_capacity, projector_availability=projector_availability)
-        except IntegrityError:
-            return render(request, 'add_room.html', context={'error': error_message})
+
+        Room.objects.create(name=room_name, room_capacity=room_capacity, projector_availability=projector_availability)
         return redirect('show_all_rooms')
 
 class ShowAllRoomsView(View):
