@@ -19,4 +19,17 @@ class AddRoomView(View):
             return render(request, 'add_room.html', context={'error': 'Capacity must be greater than 0'})
         projector_availability = request.POST.get('projector_availability') == 'on'
         Room.objects.create(name=room_name, room_capacity=room_capacity, projector_availability=projector_availability)
-        return redirect('all_rooms')
+        return redirect('show_all_rooms')
+
+class ShowAllRoomsView(View):
+        def get(self, request):
+            rooms = Room.objects.all()
+            if not rooms:
+                return render(request, 'show_all_rooms.html', context={'error': 'No rooms'})
+            return render(request, 'show_all_rooms.html', context={'rooms': rooms})
+
+class DeleteRoomView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        room.delete()
+        return redirect('show_all_rooms')

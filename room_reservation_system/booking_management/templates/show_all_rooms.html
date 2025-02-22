@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Rooms</title>
+</head>
+<body>
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+{% if rooms %}
+{% for room in rooms %}
+<h2>{{ room.id }}. {{ room.name }}</h2>
+<ul>
+    <li>Capacity: {{ room.room_capacity }}</li>
+    {% if room.projector_availability %}
+        <li>Projector: Available</li>
+    {% else %}
+        <li>Projector: Unavailable </li>
+    {% endif %}
+    <li><a href="/rooms/modify/{{ room.id }}/">Edit room</a></li>
+    <li><a href="/rooms/delete/{{ room.id }}/">Delete room</a></li>
+    <li><a href="/rooms/reserve/{{ room.id }}/">Reserve room</a></li>
+</ul>
+{% endfor %}
+{% endif %}
+</body>
+</html>
