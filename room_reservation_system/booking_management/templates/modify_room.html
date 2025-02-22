@@ -2,24 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modify Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="checkbox"] {
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-top: 0;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+        }
+
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
 </head>
 <body>
-{% if error %}
-{{ error }}
-{% endif %}
-<form action="" method="POST">
-    {% csrf_token %}
-    <label for="room_name">Room Name:
-      <input type="text" id="room_name" name="room_name">
-    </label><br>
-    <label for="room_capacity">Room Capacity:
-      <input type="text" id="room_capacity" name="room_capacity">
-    </label><br>
-    <label for="projector_availability">Is projector available?
-      <input type="checkbox" id="projector_availability" name="projector_availability">
-    </label><br>
-        <input type="submit" value="Send">
-</form>
+
+    <h2>Modify Room {{ room.name }} </h2>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="room_name">Room Name:</label>
+        <input type="text" id="room_name" name="room_name" value="{{ room.name }}" required>
+
+        <label for="room_capacity">Room Capacity:</label>
+        <input type="text" id="room_capacity" name="room_capacity" value="{{ room.room_capacity }}" required>
+
+        <label for="projector_availability">
+            <input type="checkbox" id="projector_availability" name="projector_availability" {% if room.projector_availability %}checked{% endif %}>
+            Is projector available?
+        </label>
+
+        <input type="submit" value="Update Room">
+    </form>
+
+    <footer>
+        <p>Author: Kamil Giszka</p>
+        <p><a href="mailto:kamilgiszka109@gmail.com">kamilgiszka109@gmail.com</a></p>
+    </footer>
+
 </body>
 </html>

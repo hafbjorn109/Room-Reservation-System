@@ -2,27 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Rooms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .room-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 900px;
+        }
+
+        .room-container ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .room-container li {
+            font-size: 16px;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .room-container a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .room-container a:hover {
+            color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+        }
+
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-{% if error %}
-<p>{{ error }}</p>
-{% endif %}
-{% if rooms %}
-{% for room in rooms %}
-<h2>{{ room.id }}. {{ room.name }}</h2>
-<ul>
-    <li>Capacity: {{ room.room_capacity }}</li>
-    {% if room.projector_availability %}
-        <li>Projector: Available</li>
-    {% else %}
-        <li>Projector: Unavailable </li>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
     {% endif %}
-    <li><a href="/rooms/modify/{{ room.id }}/">Edit room</a></li>
-    <li><a href="/rooms/delete/{{ room.id }}/">Delete room</a></li>
-    <li><a href="/rooms/reserve/{{ room.id }}/">Reserve room</a></li>
-</ul>
-{% endfor %}
-{% endif %}
+
+    {% if rooms %}
+        {% for room in rooms %}
+            <div class="room-container">
+                <h2>{{ room.id }}. {{ room.name }}</h2>
+                <ul>
+                    <li><strong>Capacity:</strong> {{ room.room_capacity }}</li>
+                    <li><strong>Projector:</strong> {% if room.projector_availability %}Available{% else %}Unavailable{% endif %}</li>
+                    <li><a href="/rooms/modify/{{ room.id }}/">Edit room</a></li>
+                    <li><a href="/rooms/delete/{{ room.id }}/">Delete room</a></li>
+                    <li><a href="/rooms/reserve/{{ room.id }}/">Reserve room</a></li>
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <footer>
+        <p>Author: Kamil Giszka</p>
+        <p><a href="mailto:kamilgiszka109@gmail.com">kamilgiszka109@gmail.com</a></p>
+    </footer>
+
 </body>
 </html>

@@ -2,22 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="checkbox"] {
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-top: 0;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+    </style>
 </head>
 <body>
-<h2>Add New Room</h2>
-<form action="" method="POST">
-    {% csrf_token %}
-    <label for="room_name">Room Name:
-      <input type="text" id="room_name" name="room_name">
-    </label><br>
-    <label for="room_capacity">Room Capacity:
-      <input type="text" id="room_capacity" name="room_capacity">
-    </label><br>
-    <label for="projector_availability">Is projector available?
-      <input type="checkbox" id="projector_availability" name="projector_availability">
-    </label><br>
-        <input type="submit" value="Send">
-</form>
+    <h2>Add New Room</h2>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="room_name">Room Name:</label>
+        <input type="text" id="room_name" name="room_name" required>
+
+        <label for="room_capacity">Room Capacity:</label>
+        <input type="text" id="room_capacity" name="room_capacity" required>
+
+        <label for="projector_availability">
+            <input type="checkbox" id="projector_availability" name="projector_availability">
+            Is projector available?
+        </label>
+
+        <input type="submit" value="Add">
+    </form>
 </body>
 </html>
