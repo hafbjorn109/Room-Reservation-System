@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
-from booking_management.models import Room
+from booking_management.models import Room, Reservation
 
 
 def validate_room_data(room_name, room_capacity):
@@ -131,3 +133,21 @@ class MainMenuView(View):
     """
     def get(self, request):
         return render(request, 'index.html')
+
+class ReservationView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        return render(request, 'room_reservation.html', context={'room': room})
+    def post(self, request, room_id):
+        reservation_date_str = request.POST.get('date')
+        print(reservation_date_str)
+        if Reservation.objects.filter(room_id=room_id, date=reservation_date_str).exists():
+            return render(request, 'room_reservation.html', context={'error': 'The room is already booked for this date'})
+        reservation_date = datetime.strptime(reservation_date_str, '%Y-%m-%d').date()
+        print(reservation_date)
+        if reservation_date < datetime.today().date():
+            return render(request, 'room_reservation.html', context={'error': 'You cant reserve a room for the past'})
+        comment = request.POST.get('comment')
+        room = Room.objects.get(id=room_id)
+        Reservation.objects.create(room_id=room, date=reservation_date, comment=comment)
+        return redirect('show_all_rooms')

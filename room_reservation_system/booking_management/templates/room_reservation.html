@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Room Reservation</title>
+</head>
+<body>
+    <h2>Reservation for Room {{ room.name }} </h2>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <label for="comment">Comment: </label>
+        <input type="text" id="comment" name="comment" required>
+
+        <label for="date">
+            <input type="date" id="date" name="date" required>
+        </label>
+
+        <input type="submit" value="Reserve">
+    </form>
+
+    <footer>
+        <p>Author: Kamil Giszka</p>
+        <p><a href="mailto:kamilgiszka109@gmail.com">kamilgiszka109@gmail.com</a></p>
+    </footer>
+
+</body>
+</html>
