@@ -218,3 +218,42 @@ class RoomDetailsView(View):
             return render(request, 'show_all_rooms.html', context={'error': 'Room not found'})
         reservations = room.reservation_set.all().order_by('date')
         return render(request, 'room_details.html', context={'room': room, 'reservations': reservations})
+
+class SearchRoomView(View):
+    """
+    A view to search for rooms based on various criteria: room name, capacity, and projector availability.
+    """
+    def get(self, request):
+        """
+        Handles GET requests to search for rooms based on the provided criteria.
+
+        Args:
+            request (HttpRequest): The request object containing search parameters.
+
+        Returns:
+            HttpResponse: Renders the search results or the initial page if no results are found.
+        """
+        room_name = request.GET.get('room_name')
+        room_capacity = request.GET.get('room_capacity')
+        projector_availability = request.GET.get('projector_availability') == "on"
+        try:
+            room_capacity = int(room_capacity) if room_capacity else 0
+        except ValueError:
+            room_capacity = 0
+
+        rooms = Room.objects.all()
+        if projector_availability:
+            rooms = rooms.filter(projector_availability=projector_availability)
+        if room_capacity:
+            rooms = rooms.filter(room_capacity__gte=room_capacity)
+        if room_name:
+            rooms = rooms.filter(name=room_name)
+
+        for room in rooms:
+            reservations = [reservation.date for reservation in room.reservation_set.all()]
+            room.reserved = date.today() in reservations
+
+        if not rooms:
+            return render(request, 'show_all_rooms.html', context={'error': 'No rooms found'})
+
+        return render(request, 'show_all_rooms.html', context={'rooms': rooms})

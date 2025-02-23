@@ -96,6 +96,7 @@
                     <li><strong>Capacity:</strong> {{ room.room_capacity }}</li>
                     <li><strong>Projector:</strong> {% if room.projector_availability %}Available{% else %}Unavailable{% endif %}</li>
                     <li><strong>Reserved: </strong> {% if room.reserved %} Reserved {% else %} Available {% endif %}</li>
+                    <li><a href="/room/{{ room.id }}/">Show details</a></li>
                     <li><a href="/room/modify/{{ room.id }}/">Edit room</a></li>
                     <li><a href="/room/delete/{{ room.id }}/">Delete room</a></li>
                     <li><a href="/room/reserve/{{ room.id }}/">Reserve room</a></li>

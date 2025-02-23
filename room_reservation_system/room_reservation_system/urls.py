@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from booking_management.views import (AddRoomView, ShowAllRoomsView, DeleteRoomView, ModifyRoomView, MainMenuView,
-                                      ReservationView, RoomDetailsView)
+                                      ReservationView, RoomDetailsView, SearchRoomView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +28,5 @@ urlpatterns = [
     path('', MainMenuView.as_view(), name='main_menu'),
     path('room/reserve/<int:room_id>/', ReservationView.as_view(), name='room_reservation'),
     path('room/<int:room_id>/', RoomDetailsView.as_view(), name='room_details'),
+    path('search/', SearchRoomView.as_view(), name='search_room')
 ]

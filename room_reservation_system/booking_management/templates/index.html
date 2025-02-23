@@ -71,6 +71,60 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* New Search Section Styling */
+        .search-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .search-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-section label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .search-section input[type="text"], .search-section input[type="checkbox"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-section input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-section input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .search-section input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -85,6 +139,25 @@
     <div class="menu">
         <a href="/rooms">All Rooms</a>
         <a href="/room/new">Add New Room</a>
+    </div>
+
+    <div class="search-section">
+        <h2>Search Room</h2>
+        <form action="/search" method="GET">
+            {% csrf_token %}
+            <label for="room_name">Room Name:</label>
+            <input type="text" id="room_name" name="room_name">
+
+            <label for="room_capacity">Room Capacity:</label>
+            <input type="text" id="room_capacity" name="room_capacity">
+
+            <label for="projector_availability">
+                <input type="checkbox" id="projector_availability" name="projector_availability">
+                Projector
+            </label>
+
+            <input type="submit" value="Search">
+        </form>
     </div>
 
     <footer>
