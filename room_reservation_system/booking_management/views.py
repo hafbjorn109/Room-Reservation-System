@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
@@ -69,7 +69,7 @@ class ShowAllRoomsView(View):
         rooms = Room.objects.all()
         for room in rooms:
             reservations = [reservation.date for reservation in room.reservation_set.all()]
-            room.reserved = datetime.today().date() in reservations
+            room.reserved = date.today() in reservations
         if not rooms:
             return render(request, 'show_all_rooms.html', context={'error': 'No rooms'})
         return render(request, 'show_all_rooms.html', context={'rooms': rooms})
@@ -138,25 +138,83 @@ class MainMenuView(View):
         return render(request, 'index.html')
 
 class ReservationView(View):
+    """
+        This view allows users to make reservations for a specific room. It provides
+        error handling for the following cases:
+        - Room not found.
+        - Room already reserved on the selected date.
+        - Attempt to reserve a room for a date in the past.
+
+        Attributes:
+            room_id (int): The ID of the room being reserved.
+        """
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-        return render(request, 'room_reservation.html', context={'room': room})
+        """
+        Retrieves the room details and the list of existing reservations for the room.
+
+        Args:
+            request (HttpRequest): The request object.
+            room_id (int): The ID of the room being viewed.
+
+        Returns:
+            HttpResponse: The rendered reservation form or error page if the room is not found.
+        """
+        try:
+            room = Room.objects.get(id=room_id)
+        except Room.DoesNotExist:
+            return render(request, 'show_all_rooms.html', context={'error': 'Room not found'})
+        reservations = room.reservation_set.all().order_by('date')
+        return render(request, 'room_reservation.html', context={'room': room, 'reservations': reservations})
     def post(self, request, room_id):
+        """
+        Handles form submission for room reservation, validating the reservation
+        date and checking for room availability.
+
+        Args:
+            request (HttpRequest): The request object containing form data.
+            room_id (int): The ID of the room being reserved.
+
+        Returns:
+            HttpResponse: The rendered reservation form with error messages or
+                          success redirect to room list.
+        """
+        try:
+            room = Room.objects.get(id=room_id)
+        except Room.DoesNotExist:
+            return render(request, 'show_all_rooms.html', context={'error': 'Room not found'})
+
         reservation_date_str = request.POST.get('date')
-        print(reservation_date_str)
+        reservations = room.reservation_set.all().order_by('date')
+
         if Reservation.objects.filter(room_id=room_id, date=reservation_date_str).exists():
-            return render(request, 'room_reservation.html', context={'error': 'The room is already booked for this date'})
+            return render(request, 'room_reservation.html', context={'error': 'The room is already booked for this date',
+                                                                     'reservations': reservations})
         reservation_date = datetime.strptime(reservation_date_str, '%Y-%m-%d').date()
-        print(reservation_date)
-        if reservation_date < datetime.today().date():
-            return render(request, 'room_reservation.html', context={'error': 'You cant reserve a room for the past'})
+        if reservation_date < date.today():
+            return render(request, 'room_reservation.html', context={'error': 'You cant reserve a room for the past',
+                                                                     'reservations': reservations})
         comment = request.POST.get('comment')
-        room = Room.objects.get(id=room_id)
         Reservation.objects.create(room_id=room, date=reservation_date, comment=comment)
         return redirect('show_all_rooms')
 
 class RoomDetailsView(View):
+    """
+    A view to display the details of a specific room.
+    """
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+        """
+        Retrieves the room details and the list of existing reservations for the room.
+
+        Args:
+            request (HttpRequest): The request object.
+            room_id (int): The ID of the room being viewed.
+
+        Returns:
+            HttpResponse: The rendered room details page or error page if the room is not found.
+        """
+        try:
+            room = Room.objects.get(id=room_id)
+        except Room.DoesNotExist:
+            return render(request, 'show_all_rooms.html', context={'error': 'Room not found'})
         reservations = room.reservation_set.all().order_by('date')
         return render(request, 'room_details.html', context={'room': room, 'reservations': reservations})
