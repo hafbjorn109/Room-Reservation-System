@@ -67,6 +67,9 @@ class ShowAllRoomsView(View):
         Retrieves and displays all rooms.
         """
         rooms = Room.objects.all()
+        for room in rooms:
+            reservations = [reservation.date for reservation in room.reservation_set.all()]
+            room.reserved = datetime.today().date() in reservations
         if not rooms:
             return render(request, 'show_all_rooms.html', context={'error': 'No rooms'})
         return render(request, 'show_all_rooms.html', context={'rooms': rooms})
