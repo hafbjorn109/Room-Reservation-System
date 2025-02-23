@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Rooms</title>
+    <title>Room Details</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,31 +81,28 @@
         }
     </style>
 </head>
+
 <body>
-
-    {% if error %}
-        <p class="error-message">{{ error }}</p>
-    {% endif %}
-
-    {% if rooms %}
-        {% for room in rooms %}
-            <div class="room-container">
-                <h2>{{ room.id }}. {{ room.name }}</h2>
-                <ul>
-                    <li><strong>Capacity:</strong> {{ room.room_capacity }}</li>
-                    <li><strong>Projector:</strong> {% if room.projector_availability %}Available{% else %}Unavailable{% endif %}</li>
-                    <li><a href="/room/modify/{{ room.id }}/">Edit room</a></li>
-                    <li><a href="/room/delete/{{ room.id }}/">Delete room</a></li>
-                    <li><a href="/room/reserve/{{ room.id }}/">Reserve room</a></li>
-                </ul>
-            </div>
+    <div class="room-container">
+        <h2>{{ room.id }}. {{ room.name }}</h2>
+        <ul>
+            <li><strong>Capacity:</strong> {{ room.room_capacity }}</li>
+            <li><strong>Projector:</strong> {% if room.projector_availability %}Available{% else %}Unavailable{% endif %}</li>
+            <li><a href="/room/modify/{{ room.id }}/">Edit room</a></li>
+            <li><a href="/room/delete/{{ room.id }}/">Delete room</a></li>
+            <li><a href="/room/reserve/{{ room.id }}/">Reserve room</a></li>
+        </ul>
+      <h2>Reserved on: </h2>
+      {% if reservations %}
+      <ul>
+        {% for reservation in reservations %}
+        <li>
+        {{ reservation.date }} <br>
+        {{ reservation.comment }} <br><br>
         {% endfor %}
-    {% endif %}
-
-    <footer>
-        <p>Author: Kamil Giszka</p>
-        <p><a href="mailto:kamilgiszka109@gmail.com">kamilgiszka109@gmail.com</a></p>
-    </footer>
-
+      {% endif %}
+        </li>
+      </ul>
+  </div>
 </body>
 </html>

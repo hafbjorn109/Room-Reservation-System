@@ -151,3 +151,9 @@ class ReservationView(View):
         room = Room.objects.get(id=room_id)
         Reservation.objects.create(room_id=room, date=reservation_date, comment=comment)
         return redirect('show_all_rooms')
+
+class RoomDetailsView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        reservations = room.reservation_set.all().order_by('date')
+        return render(request, 'room_details.html', context={'room': room, 'reservations': reservations})
